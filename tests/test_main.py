@@ -1,7 +1,9 @@
 import main
 
 
-def test_main(caplog):
+def test_main(caplog, mocker):
+    mocker.patch('main.load_k8s_context')
+    mocker.patch('main.find_and_terminate_pods')
     main.main()
     assert "BEHOLD" in caplog.text
 

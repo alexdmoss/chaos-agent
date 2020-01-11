@@ -1,13 +1,12 @@
 import chaos_agent.utils as utils
 
 
-# def test_load_k8s_context():
-#     cfg = utils.load_k8s_context()
-#     assert cfg == 1
+def test_random():
+    assert utils.get_random_int(10) in [i for i in range(10)]
 
 
-def test_list_all_pods(caplog):
-    pods = utils.list_all_pods()
-    expected = "kube-proxy"
-    matching_pods = [pod for pod in pods if expected in pod]
-    assert len(matching_pods) > 0
+def test_logging(monkeypatch, caplog):
+    monkeypatch.setenv("DEBUG", "True")
+    logger = utils.configure_logging()
+    logger.debug("This is a DEBUG message")
+    assert "This is a DEBUG message" in caplog.text
