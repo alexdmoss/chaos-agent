@@ -21,9 +21,11 @@ def list_all_pods():
 
     core_api = client.CoreV1Api()
     try:
-        pods = [pod.metadata.name for pod in core_api.list_pod_for_all_namespaces(timeout_seconds=60).items]
+        pods = [[pod.metadata.name, pod.metadata.namespace]
+                for pod in core_api.list_pod_for_all_namespaces(timeout_seconds=60).items]
     except ApiException as e:
         logger.error(f"Could not fetch list of all pods: {e}")
 
+    logger.debug(f"{pods}")
     logger.debug(f"Found {len(pods)} pods")
     return pods
