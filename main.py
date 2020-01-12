@@ -12,17 +12,26 @@ logger = configure_logging()
 
 def main():
 
-    logger.info("BEHOLD THE AGENT OF CHAOS")
-    logger.debug("Debugging is ENABLED")
+    logger.info("BEHOLD, the:")
+    with open(r"ascii.txt") as a:
+        logger.info(f"{a.read()}")
 
     config = load_config("config.yaml")
+
+    logger.debug("Config initalised with the following values:")
+    logger.debug(f"  Debug:                  {config.debug}")
+    logger.debug(f"  Dry Run:                {config.dryRun}")
+    logger.debug(f"  Update Frequency:       {config.updateFrequency}")
+    logger.debug(f"  Randomised Frequency:   {config.randomiseFrequency}")
+    logger.debug(f"  Pods To Delete:         {config.numPodsToDelete}")
+    logger.debug(f"  Nodes To Delete:        {config.numNodesToDelete}")
+    logger.debug(f"  ExcludedNamespaces:     {config.excludedNamespaces}")
 
     load_k8s_context()
 
     while True:
         find_and_terminate_pods()
         # find_and_terminate_nodes()
-        print(config.updateFrequency)
         time.sleep(config.updateFrequency)
 
 
