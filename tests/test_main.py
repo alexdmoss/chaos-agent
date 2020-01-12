@@ -1,10 +1,13 @@
 import main
+from pytest import raises
 
 
 def test_main(caplog, mocker):
     mocker.patch('main.load_k8s_context')
     mocker.patch('main.find_and_terminate_pods')
-    main.main()
+    mocker.patch("time.sleep", side_effect=InterruptedError)
+    with raises(InterruptedError):
+        main.main()
     assert "BEHOLD" in caplog.text
 
 

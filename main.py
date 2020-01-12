@@ -1,4 +1,5 @@
 import sys
+import time
 
 from chaos_agent.client import load_k8s_context
 from chaos_agent.pods import find_and_terminate_pods
@@ -14,11 +15,14 @@ def main():
     logger.info("BEHOLD THE AGENT OF CHAOS")
     logger.debug("Debugging is ENABLED")
 
+    update_frequency = 60
+
     load_k8s_context()
 
-    find_and_terminate_pods()
-
-    # find_and_terminate_nodes()
+    while True:
+        find_and_terminate_pods()
+        # find_and_terminate_nodes()
+        time.sleep(update_frequency)
 
 
 def init():
