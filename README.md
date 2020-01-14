@@ -7,7 +7,7 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 - [x] Dry Run mode
 - [x] Randomise mode
 - [x] Num Pods to Delete
-- [ ] make config filename configurable
+- [x] make config filename configurable
 - [ ] make grace period configurable
 - [ ] Excluding namespaces for pod deletion
 - [ ] Namespace inclusion option
@@ -18,6 +18,16 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 - [ ] Missing tests for nodes
 
 ---
+
+## Running The Tool
+
+The agent will run against the current Kubernetes context. In other words, it'll start finding and deleting pods/nodes against your locally authenticated cluster.
+
+It is also designed to run within the cluster itself - acting on other resources accordingly.
+
+/// add note about RBAC here
+
+You can specify a config file to set a number of options to change the agent's behaviour. Defaults are set in `class Config` in `chaos_agent/utils.py`. This file defaults to `./config.yaml`, but can be overridden with `export CFG_FILE=/path/to/yaml`.
 
 ## Local Development
 

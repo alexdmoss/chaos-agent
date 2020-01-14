@@ -1,5 +1,6 @@
 import sys
 import time
+from os import getenv
 
 from chaos_agent.client import load_k8s_context
 from chaos_agent.pods import find_and_terminate_pods
@@ -18,7 +19,8 @@ def main():
 
     logger.debug("DEBUG mode enabled - actions will be printed to log")
 
-    config = load_config("config.yaml")
+    cfg_file = getenv("CFG_FILE", "config.yaml")
+    config = load_config(cfg_file)
 
     logger.debug("Config initalised with the following values:")
     logger.debug(f"  Dry Run:                {config.dryRun}")
