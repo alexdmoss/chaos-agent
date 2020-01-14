@@ -34,7 +34,8 @@ def main():
     load_k8s_context()
 
     while True:
-        find_and_terminate_pods(config.numPodsToDelete, config.dryRun, config.gracePeriod)
+        find_and_terminate_pods(num_pods=config.numPodsToDelete, dry_run=config.dryRun,
+                                grace=config.gracePeriod, exclusions=config.excludedNamespaces)
         # find_and_terminate_nodes()
         interval = calc_interval(frequency=config.updateFrequency, randomise=config.randomiseFrequency)
         logger.debug(f'Sleeping for {interval}')

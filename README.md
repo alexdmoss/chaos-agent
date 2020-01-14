@@ -8,8 +8,8 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 - [x] Randomise mode
 - [x] Num Pods to Delete
 - [x] make config filename configurable
-- [ ] make grace period configurable
-- [ ] Excluding namespaces for pod deletion
+- [x] make grace period configurable
+- [x] Excluding namespaces for pod deletion
 - [ ] Namespace inclusion option
 - [ ] Dockerfile
 - [ ] CI in gitlab

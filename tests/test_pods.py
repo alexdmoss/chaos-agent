@@ -42,6 +42,22 @@ def test_list_pods(mocker):
     assert any([pod for pod in pods if pod[1] == expected_ns])
 
 
+def test_list_pods_with_exclusion(mocker):
+    with open('./tests/mocks/pod-list.json', 'r') as f:
+        raw_data = f.read()
+        pod_list = json.loads(raw_data, object_hook=lambda d: Namespace(**d))
+    mocker.patch('chaos_agent.pods.list_all_pods', return_value=pod_list)
+
+    exclusion = ['ingress']
+    expected_pod = 'nginx-ingress-controller-85744dcf89-2zc5j'
+    expected_ns = 'ingress'
+
+    pods = chaos_agent.pods.list_pods(excluded_namespaces=exclusion)
+
+    assert expected_pod not in [pod for pod in pods]
+    assert expected_ns not in [pod for pod in pods]
+
+
 def test_list_pods_is_zero(mocker):
     mocker.patch('chaos_agent.pods.list_all_pods', return_value=None)
     pods = chaos_agent.pods.list_pods()
