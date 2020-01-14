@@ -30,7 +30,7 @@ def get_random_list_of_ints(limit, amount):
         return sample(range(0, (limit - 1)), amount)
 
 
-def load_config(filename):
+def load_config(filename='config.yaml'):
     data = {}
     try:
         with open(filename, 'r') as f:
@@ -75,6 +75,7 @@ def set_default_ns_exclusions():
 class Config:
     dryRun: bool = True
     debug: bool = False
+    gracePeriod: int = 0
     updateFrequency: int = 60
     randomiseFrequency: bool = False
     numPodsToDelete: int = 1

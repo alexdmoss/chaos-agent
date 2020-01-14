@@ -1,17 +1,17 @@
 from kubernetes import client
 from kubernetes.client.rest import ApiException
 
-from chaos_agent.utils import get_random_int, get_random_list_of_ints
+from chaos_agent.utils import get_random_list_of_ints
 from chaos_agent.utils import configure_logging
 
 
 logger = configure_logging()
 
 
-def find_and_terminate_pods(num_pods=1, dry_run=True):
+def find_and_terminate_pods(num_pods=1, dry_run=True, grace=0):
     pods = list_pods()
     if pods:
-        return [delete_pod(pod, dry_run=dry_run) for pod in select_random_pods(pods, num_pods)]
+        return [delete_pod(pod, dry_run=dry_run, grace=grace) for pod in select_random_pods(pods, num_pods)]
 
 
 def list_all_pods():
