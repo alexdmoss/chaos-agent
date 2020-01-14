@@ -7,8 +7,9 @@ services:
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
-  CONTAINER_IMAGE_NAME: eu.gcr.io/${GCP_PROJECT_ID}/chaos-agent
   GOOGLE_CREDENTIALS: "${BUILD_KEY}"
+  GCP_PROJECT_ID: ${GCP_PROJECT}
+  CONTAINER_IMAGE_NAME: eu.gcr.io/${GCP_PROJECT_ID}/chaos-agent
   
 build:
   stage: build
