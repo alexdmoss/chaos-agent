@@ -12,6 +12,13 @@ def test_logging(monkeypatch, caplog):
     assert "This is a DEBUG message" in caplog.text
 
 
+def test_calc_interval(mocker):
+    assert utils.calc_interval(10, False) == 10
+    assert utils.calc_interval(5, True) in [1, 2, 3, 4, 5]
+    mocker.patch('chaos_agent.utils.get_random_int', return_value=0)
+    assert utils.calc_interval(5, True) == 5
+
+
 def test_load_good_config(tmp_path):
     mock_cfg = """
     dryRun: False # Set to True to just print the pod/node to be deleted, without taking action

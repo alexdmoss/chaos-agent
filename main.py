@@ -4,7 +4,7 @@ import time
 from chaos_agent.client import load_k8s_context
 from chaos_agent.pods import find_and_terminate_pods
 # from chaos_agent.nodes import find_and_terminate_nodes
-from chaos_agent.utils import configure_logging, load_config
+from chaos_agent.utils import configure_logging, load_config, calc_interval
 
 
 logger = configure_logging()
@@ -33,7 +33,8 @@ def main():
     while True:
         find_and_terminate_pods(config.dryRun)
         # find_and_terminate_nodes()
-        time.sleep(config.updateFrequency)
+        interval = calc_interval(frequency=config.updateFrequency, randomise=config.randomiseFrequency)
+        time.sleep(interval)
 
 
 def init():

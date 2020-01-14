@@ -4,15 +4,16 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 
 ## To Do
 
-- [ ] Dry Run mode
-- [ ] Randomise mode
+- [x] Dry Run mode
+- [x] Randomise mode
 - [ ] NUm Pods to Delete
+- [ ] Excluding namespaces for pod deletion
+- [ ] Namespace inclusion option
+- [ ] Dockerfile
+- [ ] CI in gitlab
 - [ ] Reenable node deletion (setup test cluster to autoheal first)
 - [ ] Num Nodes to Delete
 - [ ] Missing tests for nodes
-- [ ] Excluding namespaces for pod deletion
-- [ ] Dockerfile
-- [ ] CI in gitlab
 
 ---
 

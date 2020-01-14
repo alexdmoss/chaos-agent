@@ -1,5 +1,6 @@
 import logging
 import yaml
+import time
 from os import getenv
 from random import seed, randint
 from dataclasses import dataclass, field
@@ -45,9 +46,18 @@ def load_config(filename):
             logger.error(f"Bad data type in config file. See error message: {e}")
             logger.warning(f"Default config values will be used: {Config()}")
             return Config()
-
     else:
         return Config()
+
+
+def calc_interval(frequency, randomise=False):
+    if randomise:
+        interval = get_random_int(limit=frequency)
+        if interval == 0:
+            interval = frequency
+    else:
+        interval = frequency
+    return interval
 
 
 def set_default_ns_exclusions():
