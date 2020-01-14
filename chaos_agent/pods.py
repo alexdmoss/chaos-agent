@@ -9,7 +9,7 @@ logger = configure_logging()
 
 
 def find_and_terminate_pods(num_pods=1, dry_run=True, grace=0, inclusions=[], exclusions=[]):
-    pods = list_pods(included_namespacees=inclusions, excluded_namespaces=exclusions)
+    pods = list_pods(included_namespaces=inclusions, excluded_namespaces=exclusions)
     if pods:
         return [delete_pod(pod=pod, dry_run=dry_run, grace=grace) for pod in select_random_pods(pods, num_pods)]
 
