@@ -9,7 +9,7 @@ def test_find_and_terminate_pods_stubbed(mocker, monkeypatch, caplog):
     monkeypatch.setenv('DEBUG', 'True')
     chaos_agent.utils.configure_logging()
     mocker.patch('chaos_agent.pods.list_pods')
-    mocker.patch('chaos_agent.pods.select_random_pods', return_value=['cert-manager-5c5f4b9b49-m6xd8', 'cert-manager'])
+    mocker.patch('chaos_agent.pods.select_random_pods', return_value=[['cert-manager-5c5f4b9b49-m6xd8', 'cert-manager']])
     mocker.patch('chaos_agent.pods.client.CoreV1Api.delete_namespaced_pod')
     chaos_agent.pods.find_and_terminate_pods(dry_run=False)
     assert 'Deleted pod:' in caplog.text
@@ -17,7 +17,7 @@ def test_find_and_terminate_pods_stubbed(mocker, monkeypatch, caplog):
 
 def test_find_and_terminate_pods_dry_run(mocker, caplog):
     mocker.patch('chaos_agent.pods.list_pods')
-    mocker.patch('chaos_agent.pods.select_random_pods', return_value=['cert-manager-5c5f4b9b49-m6xd8', 'cert-manager'])
+    mocker.patch('chaos_agent.pods.select_random_pods', return_value=[['cert-manager-5c5f4b9b49-m6xd8', 'cert-manager']])
     chaos_agent.pods.find_and_terminate_pods(dry_run=True)
     assert 'DRY-RUN:' in caplog.text
     assert 'would have been deleted' in caplog.text
