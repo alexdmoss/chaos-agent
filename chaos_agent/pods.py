@@ -8,8 +8,8 @@ from chaos_agent.utils import configure_logging
 logger = configure_logging()
 
 
-def find_and_terminate_pods(num_pods=1, dry_run=True, grace=0, exclusions=[]):
-    pods = list_pods(excluded_namespaces=exclusions)
+def find_and_terminate_pods(num_pods=1, dry_run=True, grace=0, inclusions=[], exclusions=[]):
+    pods = list_pods(included_namespacees=inclusions, excluded_namespaces=exclusions)
     if pods:
         return [delete_pod(pod=pod, dry_run=dry_run, grace=grace) for pod in select_random_pods(pods, num_pods)]
 
@@ -23,11 +23,15 @@ def list_all_pods():
         return None
 
 
-def list_pods(excluded_namespaces=[]):
+def list_pods(included_namespaces=[], excluded_namespaces=[]):
     all_pods = list_all_pods()
     if all_pods:
-        pods = [[pod.metadata.name, pod.metadata.namespace]
-                for pod in all_pods.items if pod.metadata.namespace not in excluded_namespaces]
+        if len(included_namespaces) > 0:
+            pods = [[pod.metadata.name, pod.metadata.namespace]
+                    for pod in all_pods.items if pod.metadata.namespace in included_namespaces]
+        else:
+            pods = [[pod.metadata.name, pod.metadata.namespace]
+                    for pod in all_pods.items if pod.metadata.namespace not in excluded_namespaces]
         logger.debug(f"Found {len(pods)} pods")
         return pods
 

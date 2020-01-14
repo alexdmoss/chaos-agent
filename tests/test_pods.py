@@ -42,6 +42,22 @@ def test_list_pods(mocker):
     assert any([pod for pod in pods if pod[1] == expected_ns])
 
 
+def test_list_pods_with_inclusion(mocker):
+    with open('./tests/mocks/pod-list.json', 'r') as f:
+        raw_data = f.read()
+        pod_list = json.loads(raw_data, object_hook=lambda d: Namespace(**d))
+    mocker.patch('chaos_agent.pods.list_all_pods', return_value=pod_list)
+
+    expected_pod = 'cert-manager-5c5f4b9b49-wcr4q'
+    expected_ns = 'cert-manager'
+
+    pods = chaos_agent.pods.list_pods(included_namespaces=[expected_ns])
+
+    assert len(pods) == 1
+    assert [pod[0] for pod in pods] == [expected_pod]
+    assert [pod[1] for pod in pods] == [expected_ns]
+
+
 def test_list_pods_with_exclusion(mocker):
     with open('./tests/mocks/pod-list.json', 'r') as f:
         raw_data = f.read()

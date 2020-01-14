@@ -10,7 +10,7 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 - [x] make config filename configurable
 - [x] make grace period configurable
 - [x] Excluding namespaces for pod deletion
-- [ ] Namespace inclusion option
+- [x] Namespace inclusion option
 - [ ] Dockerfile
 - [ ] CI in gitlab
 - [ ] Reenable node deletion (setup test cluster to autoheal first)

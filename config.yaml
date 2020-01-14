@@ -7,7 +7,10 @@ gracePeriod: 60 # Seconds that the k8s api call will allow for the pod/node to s
 updateFrequency: 30 # How frequently it deletes pods/nodes
 randomiseFrequency: True # If set to True, it will randomly sleep for a time between 1->updateFrequency seconds, rather than a regular cadence
 numPodsToDelete: 2 # How many pods to delete per cycle. Set to 0 to skip, defaults to 1
-excludedNamespaces: # list of namespaces to ignore pods in. Defaults to kube-system
+includedNamespaces: # [optional] Only terminates pods within this namespace. Defaults to all namespaces
+  - alchemyst
+  - wug
+excludedNamespaces: # [optional] Ignores pods in these namespaces. Defaults to kube-system
   - kube-system
   - default
 numNodesToDelete: 0 # How many nodes to delete per cycle. Set to 0 to skip [default]

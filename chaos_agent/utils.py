@@ -67,6 +67,10 @@ def calc_interval(frequency, randomise=False):
     return interval
 
 
+def set_default_ns_inclusions():
+    return []
+
+
 def set_default_ns_exclusions():
     return ['kube-system']
 
@@ -80,4 +84,5 @@ class Config:
     randomiseFrequency: bool = False
     numPodsToDelete: int = 1
     numNodesToDelete: int = 0
+    includedNamespaces: List = field(default_factory=set_default_ns_inclusions)
     excludedNamespaces: List = field(default_factory=set_default_ns_exclusions)

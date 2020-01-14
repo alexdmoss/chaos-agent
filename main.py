@@ -27,16 +27,23 @@ def main():
     logger.debug(f'  Grace Period:           {config.gracePeriod}')
     logger.debug(f'  Update Frequency:       {config.updateFrequency}')
     logger.debug(f'  Randomised Frequency:   {config.randomiseFrequency}')
+    logger.debug(f'  Included Namespaces:    {config.includedNamespaces}')
+    logger.debug(f'  Excluded Namespaces:    {config.excludedNamespaces}')
     logger.debug(f'  Pods To Delete:         {config.numPodsToDelete}')
     logger.debug(f'  Nodes To Delete:        {config.numNodesToDelete}')
-    logger.debug(f'  ExcludedNamespaces:     {config.excludedNamespaces}')
 
     load_k8s_context()
 
     while True:
-        find_and_terminate_pods(num_pods=config.numPodsToDelete, dry_run=config.dryRun,
-                                grace=config.gracePeriod, exclusions=config.excludedNamespaces)
+
+        find_and_terminate_pods(num_pods=config.numPodsToDelete,
+                                dry_run=config.dryRun,
+                                grace=config.gracePeriod,
+                                inclusions=config.includedNamespaces,
+                                exclusions=config.excludedNamespaces)
+
         # find_and_terminate_nodes()
+
         interval = calc_interval(frequency=config.updateFrequency, randomise=config.randomiseFrequency)
         logger.debug(f'Sleeping for {interval}')
         time.sleep(interval)
