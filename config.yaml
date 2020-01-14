@@ -2,9 +2,9 @@
 # NB: to run in debug mode, export DEBUG=True
 #
 
-dryRun: False # Set to True to just print the pod/node to be deleted, without taking action
+dryRun: True # Set to True to just print the pod/node to be deleted, without taking action
 updateFrequency: 30 # How frequently it deletes pods/nodes
-randomiseFrequency: False # If set to True, it will randomly sleep for a time between 1->updateFrequency seconds, rather than a regular cadence
+randomiseFrequency: True # If set to True, it will randomly sleep for a time between 1->updateFrequency seconds, rather than a regular cadence
 numPodsToDelete: 2 # How many pods to delete per cycle. Set to 0 to skip, defaults to 1
 excludedNamespaces: # list of namespaces to ignore pods in. Defaults to kube-system
   - kube-system

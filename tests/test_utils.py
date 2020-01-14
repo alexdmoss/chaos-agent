@@ -1,8 +1,15 @@
 import chaos_agent.utils as utils
 
 
-def test_random():
+def test_random_int():
     assert utils.get_random_int(10) in [i for i in range(10)]
+
+
+def test_random_list():
+    random_ints = utils.get_random_list_of_ints(10, 3)
+    assert len(random_ints) == 3
+    for r in random_ints:
+        assert r in [i for i in range(10)]
 
 
 def test_logging(monkeypatch, caplog):

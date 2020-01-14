@@ -6,7 +6,9 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 
 - [x] Dry Run mode
 - [x] Randomise mode
-- [ ] NUm Pods to Delete
+- [x] Num Pods to Delete
+- [ ] make config filename configurable
+- [ ] make grace period configurable
 - [ ] Excluding namespaces for pod deletion
 - [ ] Namespace inclusion option
 - [ ] Dockerfile

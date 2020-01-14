@@ -1,8 +1,7 @@
 import logging
 import yaml
-import time
 from os import getenv
-from random import seed, randint
+from random import seed, randint, sample
 from dataclasses import dataclass, field
 from dacite import from_dict, exceptions
 from typing import List
@@ -21,6 +20,14 @@ logger = configure_logging()
 def get_random_int(limit):
     seed()
     return randint(0, (limit - 1))
+
+
+def get_random_list_of_ints(limit, amount):
+    if limit == amount:
+        return range(0, limit)
+    else:
+        seed()
+        return sample(range(0, (limit - 1)), amount)
 
 
 def load_config(filename):

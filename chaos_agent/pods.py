@@ -1,18 +1,17 @@
 from kubernetes import client
 from kubernetes.client.rest import ApiException
 
-from chaos_agent.utils import get_random_int
+from chaos_agent.utils import get_random_int, get_random_list_of_ints
 from chaos_agent.utils import configure_logging
 
 
 logger = configure_logging()
 
 
-def find_and_terminate_pods(dry_run):
+def find_and_terminate_pods(num_pods=1, dry_run=True):
     pods = list_pods()
     if pods:
-        pod_name, pod_ns = select_random_pod(pods)
-        delete_pod(name=pod_name, ns=pod_ns, dry_run=dry_run)
+        return [delete_pod(pod, dry_run=dry_run) for pod in select_random_pods(pods, num_pods)]
 
 
 def list_all_pods():
@@ -32,12 +31,17 @@ def list_pods():
         return pods
 
 
-def select_random_pod(pods):
-    pod = pods[get_random_int(len(pods))]
-    return pod[0], pod[1]
+def select_random_pods(pods, num_pods=1):
+    if len(pods) < num_pods:
+        num_pods = len(pods)
+        logger.warning("Found fewer pods than the number to be terminated! All pods will be deleted per cycle")
+    pod_nums = get_random_list_of_ints(len(pods), num_pods)
+    return [tuple(pods[i]) for i in pod_nums]
 
 
-def delete_pod(name, ns, dry_run=False, grace=0):
+def delete_pod(pod, dry_run=False, grace=0):
+    name = pod[0]
+    ns = pod[1]
     if dry_run:
         logger.info(f"DRY-RUN: Pod {name} in {ns} would have been deleted")
     else:
