@@ -47,9 +47,25 @@ function watch-tests() {
 }
 
 function build() {
+
   _console_msg "Building python docker image ..." INFO true
-  docker build -t ${IMAGE_NAME} .
+
+  if [[ ${CI_SERVER:-} == "yes" ]]; then
+      echo "${GOOGLE_CREDENTIALS}" | gcloud auth activate-service-account --key-file -
+      trap "gcloud auth revoke --verbosity=error" EXIT
+  fi
+  
+  docker pull ${IMAGE_NAME}:latest || true
+  docker build --cache-from ${IMAGE_NAME}:latest --tag ${IMAGE_NAME}:latest .
+
+  if [[ ${CI_SERVER:-} == "yes" ]]; then
+    _console_msg "Pushing image to registry ..."
+    docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${CI_COMMIT_SHA}
+    docker push ${IMAGE_NAME}:${CI_COMMIT_SHA}
+  fi
+
   _console_msg "Build complete" INFO true
+
 }
 
 # ------------------------------------------------------------------

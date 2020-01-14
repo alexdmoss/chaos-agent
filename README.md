@@ -11,11 +11,11 @@ Runs in Kubernetes, kills random Kubernetes pods / nodes.
 - [x] make grace period configurable
 - [x] Excluding namespaces for pod deletion
 - [x] Namespace inclusion option
-- [ ] Dockerfile
+- [x] Dockerfile
+- [x] Missing tests for nodes
 - [ ] CI in gitlab
 - [ ] Reenable node deletion (setup test cluster to autoheal first)
 - [ ] Num Nodes to Delete
-- [ ] Missing tests for nodes
 
 ---
 
