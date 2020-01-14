@@ -51,8 +51,9 @@ function build() {
   _console_msg "Building python docker image ..." INFO true
 
   if [[ ${CI_SERVER:-} == "yes" ]]; then
-      echo "${GOOGLE_CREDENTIALS}" | gcloud auth activate-service-account --key-file -
-      trap "gcloud auth revoke --verbosity=error" EXIT
+    _assert_variables_set GOOGLE_CREDENTIALS CI_COMMIT_SHA
+    echo "${GOOGLE_CREDENTIALS}" | gcloud auth activate-service-account --key-file -
+    trap "gcloud auth revoke --verbosity=error" EXIT
   fi
   
   docker pull ${IMAGE_NAME}:latest || true
