@@ -13,9 +13,11 @@ spec:
         env:
         - name: DEBUG
           value: "True"
+        - name: CFG_FILE
+          value: "/agent/config.yaml"
         volumeMounts:
         - name: config-volume
-          mountPath: /config
+          mountPath: /agent
           readOnly: true
         resources:
             limits:
