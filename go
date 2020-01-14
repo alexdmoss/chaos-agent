@@ -55,6 +55,7 @@ function build() {
     IMAGE_NAME=${CONTAINER_REGISTRY}/${GCP_PROJECT_ID}/${IMAGE_NAME}
     echo "${GOOGLE_CREDENTIALS}" | gcloud auth activate-service-account --key-file -
     trap "gcloud auth revoke --verbosity=error" EXIT
+    gcloud auth configure-docker
   fi
 
   _console_msg "Image Name: ${IMAGE_NAME}"
