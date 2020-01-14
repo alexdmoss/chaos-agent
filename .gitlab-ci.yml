@@ -1,19 +1,21 @@
 stages:
   - build
 
-services:
-  - docker:dind
-
 variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
   GOOGLE_CREDENTIALS: $BUILD_KEY
   GCP_PROJECT_ID: $GCP_PROJECT
-  IMAGE_NAME: eu.gcr.io/$GCP_PROJECT_ID/chaos-agent
+  CONTAINER_REGISTRY: eu.gcr.io
+  IMAGE_NAME: chaos-agent
   
 build:
   stage: build
   image: registry.gitlab.com/mosstech/mw-platform/mw-builder:latest
+  services:
+  - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
   script:
   - ./go build
   only:
