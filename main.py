@@ -16,10 +16,11 @@ def main():
     with open(r"ascii.txt") as a:
         logger.info(f"{a.read()}")
 
+    logger.debug("DEBUG mode enabled - actions will be printed to log")
+
     config = load_config("config.yaml")
 
     logger.debug("Config initalised with the following values:")
-    logger.debug(f"  Debug:                  {config.debug}")
     logger.debug(f"  Dry Run:                {config.dryRun}")
     logger.debug(f"  Update Frequency:       {config.updateFrequency}")
     logger.debug(f"  Randomised Frequency:   {config.randomiseFrequency}")
@@ -30,7 +31,7 @@ def main():
     load_k8s_context()
 
     while True:
-        find_and_terminate_pods()
+        find_and_terminate_pods(config.dryRun)
         # find_and_terminate_nodes()
         time.sleep(config.updateFrequency)
 

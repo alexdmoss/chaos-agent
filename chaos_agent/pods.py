@@ -8,11 +8,11 @@ from chaos_agent.utils import configure_logging
 logger = configure_logging()
 
 
-def find_and_terminate_pods():
+def find_and_terminate_pods(dry_run):
     pods = list_pods()
     if pods:
         pod_name, pod_ns = select_random_pod(pods)
-        delete_pod(pod_name, pod_ns)
+        delete_pod(name=pod_name, ns=pod_ns, dry_run=dry_run)
 
 
 def list_all_pods():
@@ -37,10 +37,13 @@ def select_random_pod(pods):
     return pod[0], pod[1]
 
 
-def delete_pod(name, ns, grace=0):
-    core_api = client.CoreV1Api()
-    try:
-        core_api.delete_namespaced_pod(name=name, namespace=ns, grace_period_seconds=grace)
-        logger.debug(f"Deleted pod: {name} in {ns}")
-    except ApiException as e:
-        logger.error(f"Failed to delete pod, error message: {e}")
+def delete_pod(name, ns, dry_run=False, grace=0):
+    if dry_run:
+        logger.info(f"DRY-RUN: Pod {name} in {ns} would have been deleted")
+    else:
+        core_api = client.CoreV1Api()
+        try:
+            core_api.delete_namespaced_pod(name=name, namespace=ns, grace_period_seconds=grace)
+            logger.debug(f"Deleted pod: {name} in {ns}")
+        except ApiException as e:
+            logger.error(f"Failed to delete pod, error message: {e}")
