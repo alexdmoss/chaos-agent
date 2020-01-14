@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: mw-platform
+
+commonLabels:
+  app: chaos-agent
+
+# generate a ConfigMap named my-java-server-props-<some-hash> where each file
+# in the list appears as a data entry (keyed by base filename).
+configMapGenerator:
+- files:
+  - config.yaml
+  name: agent-config
+
+resources:
+- chaos-agent.yaml
+images:
+- name: chaos-agent
+  newName: eu.gcr.io/moss-work/chaos-agent
+  newTag: 31191b057365866ee04f9d62fba651d1cc2ab643

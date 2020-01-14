@@ -1,10 +1,12 @@
 stages:
-  - build
+  - build # Tests are baked into the Dockerfile
+  - deploy
 
 variables:
   GOOGLE_CREDENTIALS: $BUILD_KEY
   GCP_PROJECT_ID: $GCP_PROJECT
   CONTAINER_REGISTRY: eu.gcr.io
+  K8S_CLUSTER_NAME: mw-prod
   IMAGE_NAME: chaos-agent
   
 build:
@@ -18,5 +20,13 @@ build:
     DOCKER_TLS_CERTDIR: ""
   script:
   - ./go build
+  only:
+  - master
+
+deploy:
+  stage: deploy
+  image: registry.gitlab.com/mosstech/mw-platform/mw-builder:latest
+  script:
+  - ./go deploy
   only:
   - master

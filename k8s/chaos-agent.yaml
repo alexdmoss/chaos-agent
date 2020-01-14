@@ -1,0 +1,57 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: chaos-agent
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: chaos-agent:SET_BY_CI
+        name: chaos-agent
+        env:
+        - name: DEBUG
+          value: "True"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /config
+          readOnly: true
+        resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 10m
+              memory: 25Mi
+        securityContext:
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          runAsUser: 1337
+      volumes:
+      - name: config-volume
+        configMap:
+          name: agent-config
+      restartPolicy: Always
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - chaos-agent
+            topologyKey: "kubernetes.io/hostname"
+
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: chaos-agent
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: chaos-agent
+---

@@ -1,0 +1,10 @@
+dryRun: False
+gracePeriod: 0
+updateFrequency: 60
+randomiseFrequency: True
+
+numPodsToDelete: 2
+includedNamespaces: []
+excludedNamespaces: ['kube-system']
+
+numNodesToDelete: 0

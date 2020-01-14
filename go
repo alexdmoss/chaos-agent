@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ -z ${IMAGE_NAME:-} ]]; then
   IMAGE_NAME=chaos-agent
-fi 
+fi
 
 function help() {
   echo -e "Usage: go <command>"
@@ -27,6 +27,7 @@ function init() {
 
 function run() {
   _console_msg "Running python:main ..." INFO true
+  export CFG_FILE=local-config.yaml
   pipenv run python3 main.py "$@"
   _console_msg "Execution complete" INFO true
 }
@@ -67,9 +68,36 @@ function build() {
     _console_msg "Pushing image to registry ..."
     docker tag ${IMAGE_NAME}:latest ${IMAGE_NAME}:${CI_COMMIT_SHA}
     docker push ${IMAGE_NAME}:${CI_COMMIT_SHA}
+    docker push ${IMAGE_NAME}:latest
   fi
 
   _console_msg "Build complete" INFO true
+
+}
+
+
+function deploy() {
+
+  _assert_variables_set GCP_PROJECT_ID CI_COMMIT_SHA
+
+  if [[ ${CI_SERVER:-} == "yes" ]]; then
+    _assert_variables_set GOOGLE_CREDENTIALS K8S_CLUSTER_NAME
+    _console_msg "-> Authenticating with GCloud"
+    echo "${GOOGLE_CREDENTIALS}" | gcloud auth activate-service-account --key-file -
+    region=$(gcloud container clusters list --project=${GCP_PROJECT_ID} --filter "NAME=${K8S_CLUSTER_NAME}" --format "value(zone)")
+    gcloud container clusters get-credentials ${K8S_CLUSTER_NAME} --project=${GCP_PROJECT_ID} --region=${region}
+  fi
+
+  pushd "k8s/" >/dev/null
+
+  _console_msg "Applying Kubernetes manifests"
+
+  namespace=$(grep 'namespace: ' kustomization.yaml | awk '{print $2}')
+  kustomize edit set image chaos-agent=eu.gcr.io/${GCP_PROJECT_ID}/chaos-agent:${CI_COMMIT_SHA}
+  kustomize build . | kubectl apply -f -
+  kubectl rollout status deploy/chaos-agent -n ${namespace}
+
+  popd >/dev/null
 
 }
 
