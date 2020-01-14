@@ -18,7 +18,9 @@ RUN pip install -r requirements-dev.txt
 RUN /usr/local/bin/pytest -v --cov-report=term-missing --cov=.
 
 FROM python:3.7.6-alpine3.11
-COPY --from=runtime-pips /app /app
+COPY --from=runtime-pips /app/main.py /app/
+COPY --from=runtime-pips /app/ascii.txt /app/
+COPY --from=runtime-pips /app/chaos_agent /app/chaos_agent
 COPY --from=runtime-pips /usr/local /usr/local
 WORKDIR /app
 ENTRYPOINT ["/usr/local/bin/python", "-u", "/app/main.py"]
